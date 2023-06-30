@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <com.example.androidlearning.TodayView
+        android:id="@+id/today_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
