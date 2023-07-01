@@ -6,12 +6,5 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.example.androidlearning.TodayView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="#000"
-        android:background="#fff"/>
-
 </LinearLayout>
 
