@@ -9,7 +9,10 @@
 
     <com.example.androidlearning.RoundedButton
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:buttonText="Rounded Button"
+        app:buttonTextSize="20"
+        />
 
 </LinearLayout>
 
