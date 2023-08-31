@@ -111,7 +111,7 @@ class BluetoothConnectionService(private var mContext: Context, val mBluetoothAd
                 Log.e(TAG, "ConnectThread: Could not create InsecureRfcommSocket " + e.message)
             }
             mmSocket = tmp
-
+            Log.d(TAG, "mmSocket is assigned. mmSocket: $mmSocket")
             // Always cancel discovery because it will slow down a connection
             mBluetoothAdapter.cancelDiscovery()
 
@@ -119,8 +119,11 @@ class BluetoothConnectionService(private var mContext: Context, val mBluetoothAd
             try {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
-                mmSocket!!.connect()
+                if (mmSocket != null) mmSocket!!.connect()
+                else Log.d(TAG ,"BluetoothSocket mmSocket is null. mmSocket: $mmSocket")
+
                 Log.d(TAG, "run: ConnectThread connected.")
+
             } catch (e: IOException) {
                 // Close the socket
                 try {
@@ -132,7 +135,7 @@ class BluetoothConnectionService(private var mContext: Context, val mBluetoothAd
                         "mConnectThread: run: Unable to close connection in socket " + e1.message
                     )
                 }
-                Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID_INSECURE)
+                Log.d(TAG, "run: ConnectThread: Could not connect to UUID: $MY_UUID_INSECURE")
             }
 
             //will talk about this in the 3rd video
@@ -213,6 +216,8 @@ class BluetoothConnectionService(private var mContext: Context, val mBluetoothAd
             }
             mmInStream = tmpIn
             mmOutStream = tmpOut
+            val bytes: ByteArray = "test".toByteArray(Charset.defaultCharset())
+            this.write(bytes)
         }
 
         override fun run() {
@@ -280,7 +285,9 @@ class BluetoothConnectionService(private var mContext: Context, val mBluetoothAd
         // Synchronize a copy of the ConnectedThread
         Log.d(TAG, "write: Write Called.")
         //perform the write
-        mConnectedThread!!.write(out)
+        if (mConnectedThread != null) mConnectedThread?.write(out)
+        else Log.d(TAG, "write: mConnectedThread is null")
+
     }
 
     companion object {
