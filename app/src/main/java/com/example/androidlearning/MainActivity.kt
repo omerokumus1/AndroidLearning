@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_ENABLE_BT = 1
         const val LOG_TAG = "and-bluetooth"
-        val MY_UUID_INSECURE = BluetoothConnectionService.MY_UUID_INSECURE
+        val MY_UUID_INSECURE = BluetoothConnectionService.BT_UUID
     }
 
     /*
@@ -214,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         bluetoothManager = getSystemService(BluetoothManager::class.java)
-        bluetoothAdapter = getBluetoothAdapter()
+        bluetoothAdapter = bluetoothManager.adapter //getBluetoothAdapter()
 
         if (bluetoothAdapter == null) {
             Log.i(LOG_TAG, "Bluetooth is not supported")
@@ -420,8 +420,12 @@ class MainActivity : AppCompatActivity() {
      * starting bluetooth service method
      */
     private fun startBTConnection(device: BluetoothDevice?, uuid: UUID?) {
-        Log.d(LOG_TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.")
-        mBluetoothConnection?.startClient(device, uuid)
+        if (device != null) {
+            Log.d(LOG_TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.")
+            mBluetoothConnection?.startClient(device, uuid)
+        } else {
+            Log.d(LOG_TAG, "startBTConnection: cant initialize RFCOM Bluetooth Connection since device is null")
+        }
     }
 
 
