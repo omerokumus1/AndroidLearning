@@ -13,11 +13,13 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.nio.charset.Charset
 import java.util.UUID
+import java.util.logging.Handler
 
 @SuppressLint("MissingPermission")
-class BluetoothConnectionService(
-    private var mContext: Context,
-    val mBluetoothAdapter: BluetoothAdapter
+class BluetoothConnectionService private constructor(
+    var mContext: Context,
+    val mBluetoothAdapter: BluetoothAdapter,
+    var mHandler: android.os.Handler
 ) {
     private var mAcceptThread: AcceptThread? = null
     private var mConnectThread: ConnectThread? = null
@@ -28,6 +30,14 @@ class BluetoothConnectionService(
 
     init {
         start()
+    }
+
+    companion object {
+        private const val TAG = "BluetoothConnectionServ"
+        private const val appName = "MYAPP"
+        val BT_UUID: UUID = UUID.fromString("00001105-0000-1000-8000-00805f9b34fb")
+        val MESSAGE_READ = 100
+
     }
 
     /**
@@ -80,6 +90,7 @@ class BluetoothConnectionService(
      * @see ConnectedThread.write
      */
     fun write(out: ByteArray) {
+
         // Synchronize a copy of the ConnectedThread
         Log.d(TAG, "write: Write Called.")
         //perform the write
@@ -232,13 +243,12 @@ class BluetoothConnectionService(
         }
 
         override fun run() {
-            val buffer = ByteArray(1024) // buffer store for the stream
+            val buffer = ByteArray(2048) // buffer store for the stream
             var numBytes: Int // bytes returned from read()
 
             // Keep listening to the InputStream until an exception occurs
             while (true) {
                 // Read from the InputStream
-                // Read from the InputStream.
                 numBytes = try {
                     mmInStream.read(buffer)
                 } catch (e: IOException) {
@@ -252,12 +262,12 @@ class BluetoothConnectionService(
                     "InputStream: $incomingMessage"
                 )
 
-
                 // Send the obtained bytes to the UI activity.
-//                val readMsg = handler.obtainMessage(
+//                val readMsg = android.os.Handler().obtainMessage(
 //                    MESSAGE_READ, numBytes, -1,
 //                    mmBuffer)
-//                readMsg.sendToTarget()
+                val readMsg = mHandler.obtainMessage(MESSAGE_READ, incomingMessage)
+                readMsg.sendToTarget()
             }
         }
 
@@ -278,15 +288,11 @@ class BluetoothConnectionService(
         /* Call this from the main activity to shutdown the connection */
         fun cancel() {
             try {
-                mBluetoothSocket!!.close()
+                mBluetoothSocket.close()
             } catch (e: IOException) {
             }
         }
     }
 
-    companion object {
-        private const val TAG = "BluetoothConnectionServ"
-        private const val appName = "MYAPP"
-        val BT_UUID: UUID = UUID.fromString("00001105-0000-1000-8000-00805f9b34fb")
-    }
+
 }

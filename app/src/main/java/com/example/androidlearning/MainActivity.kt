@@ -12,6 +12,9 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     * */
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var handler: Handler
 
     private lateinit var bluetoothManager: BluetoothManager
     private var bluetoothAdapter: BluetoothAdapter? = null
@@ -212,6 +216,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                if (msg.what == BluetoothConnectionService.MESSAGE_READ) {
+                    binding.dataRead.text = msg.obj as String
+                }
+            }
+        }
 
         bluetoothManager = getSystemService(BluetoothManager::class.java)
         bluetoothAdapter = bluetoothManager.adapter //getBluetoothAdapter()
@@ -226,14 +238,21 @@ class MainActivity : AppCompatActivity() {
                 discoverBtn.setOnClickListener { discoverDevices() }
                 connectBtn.setOnClickListener { startConnection() }
                 sendDataBtn.setOnClickListener { sendData() }
+                getDeviceDataBtn.setOnClickListener { getDeviceData() }
                 deviceList.setOnItemClickListener { _, _, position, _ -> createBond(position) }
             }
-            //Broadcasts when bond state changes (ie:pairing)
-
             //Broadcasts when bond state changes (ie:pairing)
             val filter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
             registerReceiver(broadcastReceiverForBonding, filter)
         }
+    }
+
+    private fun getDeviceData() {
+        val bytes: ByteArray =
+            "bas[{\"kullanici\": \"kullanici_adi\", \"komut\": \"veriAl\", \"rol\": \"admin\"}]son"
+                .toByteArray(Charset.defaultCharset())
+        Log.d(LOG_TAG, "getDeviceData called")
+        mBluetoothConnection!!.write(bytes)
     }
 
     //create method for starting connection
@@ -243,7 +262,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendData() {
-        val bytes: ByteArray = binding.dataText.text.toString().toByteArray(Charset.defaultCharset())
+        val bytes: ByteArray =
+            binding.dataText.text.toString().toByteArray(Charset.defaultCharset())
         mBluetoothConnection!!.write(bytes)
     }
 
@@ -261,7 +281,8 @@ class MainActivity : AppCompatActivity() {
         //create the bond.
         btDevices[position].createBond()
         mBTDevice = btDevices[position]
-        mBluetoothConnection = bluetoothAdapter?.let { BluetoothConnectionService(this, it) }
+//        mBluetoothConnection =
+//            bluetoothAdapter?.let { BluetoothConnectionService(this, it, handler) }
 
     }
 
@@ -424,10 +445,12 @@ class MainActivity : AppCompatActivity() {
             Log.d(LOG_TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.")
             mBluetoothConnection?.startClient(device, uuid)
         } else {
-            Log.d(LOG_TAG, "startBTConnection: cant initialize RFCOM Bluetooth Connection since device is null")
+            Log.d(
+                LOG_TAG,
+                "startBTConnection: cant initialize RFCOM Bluetooth Connection since device is null"
+            )
         }
     }
-
 
 
     override fun onDestroy() {
