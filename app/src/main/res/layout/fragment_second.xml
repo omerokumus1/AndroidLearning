@@ -14,5 +14,11 @@
         android:textStyle="bold"
         android:text="2. Fragment" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:translationY="50dp"
+        android:hint="type" />
 
 </RelativeLayout>

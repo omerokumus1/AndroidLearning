@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.example.androidlearning.databinding.ActivityMainBinding
 
 
@@ -40,9 +42,11 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
             .replace(binding.fragmentContainer.id, firstFragment)
-            .addToBackStack(null)
             .commit()
 
+        supportFragmentManager.commit {
+
+        }
 
         binding.bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
@@ -63,6 +67,20 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    private fun replaceWithFirst() {
+        supportFragmentManager.commit {
+            replace<FirstFragment>(binding.fragmentContainer.id)
+            setReorderingAllowed(true)
+            addToBackStack("first")
+        }
+    }
 
+    private fun replaceWithSecond() {
+        supportFragmentManager.commit {
+            replace<SecondFragment>(binding.fragmentContainer.id)
+            setReorderingAllowed(true)
+            addToBackStack("first")
+        }
+    }
 
 }
