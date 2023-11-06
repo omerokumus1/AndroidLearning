@@ -6,16 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/material_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click"
-        android:textAllCaps="false"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
+        android:text="Material Switch"
+        android:textSize="16sp"
+        app:switchPadding="12dp"
+        app:thumbTint="@color/purple_500"
+        app:trackTint="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/switchCompat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+         />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchCompat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Switch Compat"
+        android:textSize="16sp"
+        app:switchPadding="12dp"
+        app:thumbTint="@color/purple_500"
+        app:trackTint="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/appCompatToggleButton"
+        app:layout_constraintStart_toStartOf="@+id/material_switch"
+        app:layout_constraintTop_toBottomOf="@+id/material_switch" />
+
+    <androidx.appcompat.widget.AppCompatToggleButton
+        android:id="@+id/appCompatToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="16dp"
+        android:textOff="Kapalı"
+        android:textOn="Açık"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/switchCompat"
+        app:layout_constraintTop_toBottomOf="@+id/switchCompat" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

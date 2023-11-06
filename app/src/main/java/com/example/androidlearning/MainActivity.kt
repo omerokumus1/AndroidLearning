@@ -18,6 +18,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        binding
+            .appCompatToggleButton
+            .setOnCheckedChangeListener { buttonView, isChecked ->
+
+        }
 
     }
 
