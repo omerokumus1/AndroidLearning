@@ -3,10 +3,10 @@ package com.example.androidlearning
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.setPadding
 import kotlin.random.Random
 
 //             val binding = ColorCardViewBinding.inflate(LayoutInflater.from(context))
@@ -16,8 +16,13 @@ class ColorCardView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.color_card_view, this, true)
+        setupRoot()
         inflate(context, R.layout.color_card_view, this)
+    }
+
+    private fun setupRoot() {
+        setPadding(resources.getDimensionPixelSize(R.dimen.padding_12dp))
+        orientation = VERTICAL
     }
 
     override fun onFinishInflate() {
