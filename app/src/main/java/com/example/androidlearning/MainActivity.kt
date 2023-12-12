@@ -13,8 +13,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -56,12 +59,45 @@ class MainActivity : AppCompatActivity() {
             Log.d("response", "$response")
         }
 
+        CoroutineScope(Dispatchers.IO).launch {
+            val post = Post(1, 1, "Title", "Body")
+            val response = apiService.putFirstPost(post)
+            Log.d("response", "$response")
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val post = Post(1, 1, "Title New", "Body")
+            val response = apiService.patchFirstPost(post)
+            Log.d("response", "$response")
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            apiService.deleteFirstPost()
+        }
+
+
+
+
 
     }
 }
 
 
 interface ApiService {
+    @PUT("posts/1")
+    suspend fun putFirstPost(@Body post: Post): Post
+
+    @PATCH("posts/1")
+    suspend fun patchFirstPost(@Body post: Post): Post
+
+    @DELETE("posts/1")
+    suspend fun deleteFirstPost()
+
+
+    @DELETE("posts")
+    suspend fun deletePostById(@Query("id") id: Int)
+
+
     @POST("posts")
     suspend fun postPost(@Body post: Post): Post
 
