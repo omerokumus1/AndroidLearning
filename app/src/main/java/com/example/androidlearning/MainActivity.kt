@@ -40,21 +40,31 @@ class MainActivity : AppCompatActivity() {
 
         val apiService = retrofit.create(ApiService::class.java)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val firstPost = apiService.getFirstPost()
-            Log.d("response", "$firstPost")
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val firstPost = apiService.getFirstPost()
+//            Log.d("response", "$firstPost")
+//        }
+//
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val posts = apiService.getPosts()
+//            Log.d("response", "$posts")
+//        }
 
         CoroutineScope(Dispatchers.IO).launch {
-            val posts = apiService.getPosts()
-            Log.d("response", "$posts")
+            val post = Post(300, 301, "Title", "Body")
+            val response = apiService.postPost(post)
+            Log.d("response", "$response")
         }
+
 
     }
 }
 
 
 interface ApiService {
+    @POST("posts")
+    suspend fun postPost(@Body post: Post): Post
+
     @GET("posts/1")
     suspend fun getFirstPost(): Post
 
