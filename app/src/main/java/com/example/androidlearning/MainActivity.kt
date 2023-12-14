@@ -9,6 +9,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -43,9 +45,20 @@ class MainActivity : AppCompatActivity() {
 
         val apiService = retrofit.create(ApiService::class.java)
 
+        // Response class
 //        CoroutineScope(Dispatchers.IO).launch {
-//            val firstPost = apiService.getFirstPost()
-//            Log.d("response", "$firstPost")
+//            val response = apiService.getFirstPost()
+//            if (response.isSuccessful) {
+//                val post = response.body()
+//                val statusCode = response.code()
+//                Log.d("response", "response: $post")
+//                Log.d("response", "status code: $statusCode")
+//            } else {
+//                val error = response.errorBody()
+//                val message = response.message()
+//                Log.d("response ", "error: $error")
+//                Log.d("response ", "message: $message")
+//            }
 //        }
 //
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -53,27 +66,27 @@ class MainActivity : AppCompatActivity() {
 //            Log.d("response", "$posts")
 //        }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val post = Post(300, 301, "Title", "Body")
-            val response = apiService.postPost(post)
-            Log.d("response", "$response")
-        }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val post = Post(1, 1, "Title", "Body")
-            val response = apiService.putFirstPost(post)
-            Log.d("response", "$response")
-        }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val post = Post(1, 1, "Title New", "Body")
-            val response = apiService.patchFirstPost(post)
-            Log.d("response", "$response")
-        }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            apiService.deleteFirstPost()
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val post = Post(300, 301, "Title", "Body")
+//            val response = apiService.postPost(post)
+//            Log.d("response", "$response")
+//        }
+//
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val post = Post(1, 1, "Title", "Body")
+//            val response = apiService.putFirstPost(post)
+//            Log.d("response", "$response")
+//        }
+//
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val post = Post(1, 1, "Title New", "Body")
+//            val response = apiService.patchFirstPost(post)
+//            Log.d("response", "$response")
+//        }
+//
+//        CoroutineScope(Dispatchers.IO).launch {
+//            apiService.deleteFirstPost()
+//        }
 
 
 
@@ -85,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
 interface ApiService {
     @PUT("posts/1")
-    suspend fun putFirstPost(@Body post: Post): Post
+    suspend fun putFirstPost(@Body post: Post): Response<Post>
 
     @PATCH("posts/1")
     suspend fun patchFirstPost(@Body post: Post): Post
@@ -102,10 +115,10 @@ interface ApiService {
     suspend fun postPost(@Body post: Post): Post
 
     @GET("posts/1")
-    suspend fun getFirstPost(): Post
+    suspend fun getFirstPost(): Response<Post>
 
     @GET("posts")
-    suspend fun getPosts(): List<Post>
+    suspend fun getPosts(): Response<List<Post>>
 
 //    @GET("posts/{id}/comments")
 //    suspend fun getPostById(@Path("id") id: Int): Post
