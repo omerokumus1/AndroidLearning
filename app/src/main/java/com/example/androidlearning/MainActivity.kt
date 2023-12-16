@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         val apiService = retrofit.create(ApiService::class.java)
 
-        // Response class
+        /** Response class */
 //        CoroutineScope(Dispatchers.IO).launch {
 //            val response = apiService.getFirstPost()
 //            if (response.isSuccessful) {
@@ -89,8 +90,58 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
+        /** Call Class */
+//        Log.d("thread", "thread: ${Thread.currentThread().name}")
+//        val call = apiService.getFirstPost()
+//        call.enqueue(object : Callback<Post> {
+//            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+//                val post = response.body()
+//                Log.d("response", "post: $post")
+//
+//                // Update UI
+//                Log.d("thread", "thread: ${Thread.currentThread().name}")
+//                binding.textView.text = post?.title
+//            }
+//
+//            override fun onFailure(call: Call<Post>, t: Throwable) {
+//                Log.d("response", "isCanceled: ${call.isCanceled}")
+//                Log.d("response", "isExecuted: ${call.isExecuted}")
+//                Log.d("response", "request made: ${call.request()}")
+//                Log.d("response", "error message: ${t.message}")
+//            }
+//
+//        })
 
 
+        /*val call = apiService.getFirstPost()
+        call.enqueue(object : Callback<Post> {
+            init {
+                Log.d("thread", "init: ${Thread.currentThread().name}")
+            }
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                val post = response.body()
+                Log.d("thread", "onResponse: ${Thread.currentThread().name}")
+                // Update UI
+                binding.textView.text = post?.title
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Log.d("thread", "onFailure: ${Thread.currentThread().name}")
+                // Update UI
+                binding.textView.text = t.message
+            }
+        })*/
+
+        /** Call with Coroutine */
+        val call = apiService.getFirstPost()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = call.execute()
+            val post = response.body()
+            Log.d("response", "post: $post")
+            runOnUiThread {
+                binding.textView.text = post?.title
+            }
+        }
 
     }
 }
@@ -115,7 +166,7 @@ interface ApiService {
     suspend fun postPost(@Body post: Post): Post
 
     @GET("posts/1")
-    suspend fun getFirstPost(): Response<Post>
+    fun getFirstPost(): Call<Post>
 
     @GET("posts")
     suspend fun getPosts(): Response<List<Post>>
