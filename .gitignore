@@ -47,3 +47,8 @@ google-services.json
 # Android Profiling
 *.hprof
 /.idea/
+
+
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/misc.xml
