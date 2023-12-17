@@ -28,6 +28,7 @@ import retrofit2.http.Query
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var viewModel = MainViewModel()
 
     private val baseUrl = "https://jsonplaceholder.typicode.com/"
     private val retrofit = Retrofit.Builder()
@@ -47,70 +48,70 @@ class MainActivity : AppCompatActivity() {
         val apiService = retrofit.create(ApiService::class.java)
 
         /** Response class */
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val response = apiService.getFirstPost()
-//            if (response.isSuccessful) {
-//                val post = response.body()
-//                val statusCode = response.code()
-//                Log.d("response", "response: $post")
-//                Log.d("response", "status code: $statusCode")
-//            } else {
-//                val error = response.errorBody()
-//                val message = response.message()
-//                Log.d("response ", "error: $error")
-//                Log.d("response ", "message: $message")
-//            }
-//        }
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val posts = apiService.getPosts()
-//            Log.d("response", "$posts")
-//        }
+        /*CoroutineScope(Dispatchers.IO).launch {
+            val response = apiService.getFirstPost()
+            if (response.isSuccessful) {
+                val post = response.body()
+                val statusCode = response.code()
+                Log.d("response", "response: $post")
+                Log.d("response", "status code: $statusCode")
+            } else {
+                val error = response.errorBody()
+                val message = response.message()
+                Log.d("response ", "error: $error")
+                Log.d("response ", "message: $message")
+            }
+        }
 
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val post = Post(300, 301, "Title", "Body")
-//            val response = apiService.postPost(post)
-//            Log.d("response", "$response")
-//        }
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val post = Post(1, 1, "Title", "Body")
-//            val response = apiService.putFirstPost(post)
-//            Log.d("response", "$response")
-//        }
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val post = Post(1, 1, "Title New", "Body")
-//            val response = apiService.patchFirstPost(post)
-//            Log.d("response", "$response")
-//        }
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            apiService.deleteFirstPost()
-//        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val posts = apiService.getPosts()
+            Log.d("response", "$posts")
+        }*/
+
+        /*CoroutineScope(Dispatchers.IO).launch {
+            val post = Post(300, 301, "Title", "Body")
+            val response = apiService.postPost(post)
+            Log.d("response", "$response")
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val post = Post(1, 1, "Title", "Body")
+            val response = apiService.putFirstPost(post)
+            Log.d("response", "$response")
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val post = Post(1, 1, "Title New", "Body")
+            val response = apiService.patchFirstPost(post)
+            Log.d("response", "$response")
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            apiService.deleteFirstPost()
+        }*/
 
 
         /** Call Class */
-//        Log.d("thread", "thread: ${Thread.currentThread().name}")
-//        val call = apiService.getFirstPost()
-//        call.enqueue(object : Callback<Post> {
-//            override fun onResponse(call: Call<Post>, response: Response<Post>) {
-//                val post = response.body()
-//                Log.d("response", "post: $post")
-//
-//                // Update UI
-//                Log.d("thread", "thread: ${Thread.currentThread().name}")
-//                binding.textView.text = post?.title
-//            }
-//
-//            override fun onFailure(call: Call<Post>, t: Throwable) {
-//                Log.d("response", "isCanceled: ${call.isCanceled}")
-//                Log.d("response", "isExecuted: ${call.isExecuted}")
-//                Log.d("response", "request made: ${call.request()}")
-//                Log.d("response", "error message: ${t.message}")
-//            }
-//
-//        })
+        /*Log.d("thread", "thread: ${Thread.currentThread().name}")
+        val call = apiService.getFirstPost()
+        call.enqueue(object : Callback<Post> {
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                val post = response.body()
+                Log.d("response", "post: $post")
+
+                // Update UI
+                Log.d("thread", "thread: ${Thread.currentThread().name}")
+                binding.textView.text = post?.title
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Log.d("response", "isCanceled: ${call.isCanceled}")
+                Log.d("response", "isExecuted: ${call.isExecuted}")
+                Log.d("response", "request made: ${call.request()}")
+                Log.d("response", "error message: ${t.message}")
+            }
+
+        })*/
 
 
         /*val call = apiService.getFirstPost()
@@ -133,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         })*/
 
         /** Call with Coroutine */
-        val call = apiService.getFirstPost()
+        /*val call = apiService.getFirstPost()
         CoroutineScope(Dispatchers.IO).launch {
             val response = call.execute()
             val post = response.body()
@@ -141,53 +142,17 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 binding.textView.text = post?.title
             }
-        }
+        }*/
+
+
+        /** Retrofit with ViewModel */
+//        viewModel.getFirstPost()
+        viewModel.getSecondPost()
 
     }
 }
 
 
-interface ApiService {
-    @PUT("posts/1")
-    suspend fun putFirstPost(@Body post: Post): Response<Post>
-
-    @PATCH("posts/1")
-    suspend fun patchFirstPost(@Body post: Post): Post
-
-    @DELETE("posts/1")
-    suspend fun deleteFirstPost()
 
 
-    @DELETE("posts")
-    suspend fun deletePostById(@Query("id") id: Int)
-
-
-    @POST("posts")
-    suspend fun postPost(@Body post: Post): Post
-
-    @GET("posts/1")
-    fun getFirstPost(): Call<Post>
-
-    @GET("posts")
-    suspend fun getPosts(): Response<List<Post>>
-
-//    @GET("posts/{id}/comments")
-//    suspend fun getPostById(@Path("id") id: Int): Post
-
-    @GET("posts")
-    suspend fun getPostById(@Query("id") id: Int): Post
-
-
-
-
-
-}
-
-
-data class Post(
-    val userId: Int,
-    val id: Int,
-    val title: String,
-    val body: String
-)
 
