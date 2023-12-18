@@ -33,6 +33,9 @@ interface ApiService {
     fun getFirstPost(): Call<Post>
 
     @GET("posts/2")
+    fun getAllPosts(): Call<List<Post>>
+
+    @GET("posts/2")
     suspend fun getSecondPost(): Response<Post>
 
     @GET("posts")
@@ -43,9 +46,5 @@ interface ApiService {
 
     @GET("posts")
     suspend fun getPostById(@Query("id") id: Int): Post
-
-
-
-
 
 }
