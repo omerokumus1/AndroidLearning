@@ -45,6 +45,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel.postLiveData.observe(this) {
+            binding.textView.text = it.title
+        }
+
+        viewModel.errorLiveData.observe(this) {
+            binding.textView.text = it
+        }
+
         val apiService = retrofit.create(ApiService::class.java)
 
         /** Response class */

@@ -1,6 +1,7 @@
 package com.example.androidlearning
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -12,6 +13,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 class MainViewModel: ViewModel() {
+
+    val postLiveData = MutableLiveData<Post>()
+    val errorLiveData = MutableLiveData<String>()
+
     private val baseUrl = "https://jsonplaceholder.typicode.com/"
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -28,15 +33,15 @@ class MainViewModel: ViewModel() {
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (response.isSuccessful) {
                     val post = response.body()
-                    val statusCode = response.code()
+                    postLiveData.value = post
                 } else {
-                    val error = response.errorBody()
                     val message = response.message()
+                    errorLiveData.value = message
                 }
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.d("response", "error: $t")
+                errorLiveData.value = t.message
             }
         })
     }
@@ -46,10 +51,10 @@ class MainViewModel: ViewModel() {
             val response = apiService.getSecondPost()
             if (response.isSuccessful) {
                 val post = response.body()
-                val statusCode = response.code()
+                postLiveData.value = post
             } else {
-                val error = response.errorBody()
                 val message = response.message()
+                errorLiveData.value = message
             }
         }
     }
