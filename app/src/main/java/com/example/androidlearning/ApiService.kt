@@ -12,6 +12,10 @@ import retrofit2.http.Query
 
 
 interface ApiService {
+    @GET("posts")
+    suspend fun getPosts(): Response<List<Post>>
+
+
     @PUT("posts/1")
     suspend fun putFirstPost(@Body post: Post): Response<Post>
 
@@ -38,8 +42,7 @@ interface ApiService {
     @GET("posts/2")
     suspend fun getSecondPost(): Response<Post>
 
-    @GET("posts")
-    suspend fun getPosts(): Response<List<Post>>
+
 
 //    @GET("posts/{id}/comments")
 //    suspend fun getPostById(@Path("id") id: Int): Post
