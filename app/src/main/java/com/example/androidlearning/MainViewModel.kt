@@ -11,10 +11,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
     val postLiveData = MutableLiveData<Post>()
+    val postListLiveData = MutableLiveData<List<Post>>()
     val errorLiveData = MutableLiveData<String>()
+
 
     private val baseUrl = "https://jsonplaceholder.typicode.com/"
     private val retrofit = Retrofit.Builder()
@@ -26,9 +28,11 @@ class MainViewModel: ViewModel() {
         retrofit.create()
     }
 
+    private val remoteDataSource = RemoteDataSource(apiService)
+
     fun getFirstPost() {
         val call = apiService.getFirstPost()
-        call.enqueue(object: Callback<Post> {
+        call.enqueue(object : Callback<Post> {
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (response.isSuccessful) {
                     val post = response.body()
@@ -54,6 +58,27 @@ class MainViewModel: ViewModel() {
             } else {
                 val message = response.message()
                 errorLiveData.value = message
+            }
+        }
+    }
+
+    fun getPosts() {
+        viewModelScope.launch {
+            when (val response = remoteDataSource.getPosts()) {
+                is NetworkResult.Success -> {
+                    val posts = response.data
+                    postListLiveData.value = posts
+                }
+
+                is NetworkResult.Error -> {
+                    val message = response.message
+                    errorLiveData.value = message
+                }
+
+                is NetworkResult.Exception -> {
+                    val message = response.e.message
+                    errorLiveData.value = message
+                }
             }
         }
     }
