@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.androidlearning.databinding.ActivityMainBinding
 
@@ -27,20 +27,28 @@ class MainActivity : AppCompatActivity() {
 //            Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show()
 //        }
 
-        binding.root.setOnTouchListener { view, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                // Hide the keyboard when the user taps outside the EditText
-                hideKeyboard()
-                view.performClick()
-                return@setOnTouchListener true
-            }
-            return@setOnTouchListener false
+//        binding.root.setOnTouchListener { view, event ->
+//            if (event.action == MotionEvent.ACTION_DOWN) {
+//                // Hide the keyboard when the user taps outside the EditText
+//                hideKeyboard()
+//                view.performClick()
+//                return@setOnTouchListener true
+//            }
+//            return@setOnTouchListener false
+//        }
+
+        val gestureDetector = GestureDetector(this,
+            object : GestureDetector.SimpleOnGestureListener() {
+                override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    hideKeyboard()
+                    return true
+                }
+            })
+        window.decorView.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
         }
 
-
     }
-
-
 }
 
 fun Activity.hideKeyboard() {
