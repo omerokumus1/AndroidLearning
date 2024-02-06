@@ -19,7 +19,65 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+
+        //? Do not call when using toolbar functions
+//        setSupportActionBar(binding.toolbar)
+
+        //? onCreateOptionsMenu
+        binding.toolbar.inflateMenu(R.menu.toolbar_menu)
+
+        //? onOptionsItemSelected
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.favorites ->
+                    Toast.makeText(this, "Favorites clicked", Toast.LENGTH_SHORT)
+                        .show()
+
+                R.id.addContact ->
+                    Toast.makeText(this, "Add contact clicked", Toast.LENGTH_SHORT)
+                        .show()
+            }
+            true
+        }
+
+
+        //? onPrepareOptionsMenu
+        //? No equivalent for toolbar
+
+
+        /*? Navigation Icon
+        ? You can set this via XML by app:navigationIcon="@drawable/ic_arrow_back"
+        ? Using navigation icon instead of a simple button is a good practice
+        ? because it's purpose is clear
+        ? and it has the responsibility of navigating back to the previous screen.
+        ? You can also set a click listener to it.
+        ? It also has a default animation when clicked.
+         */
+        binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+
+        binding.toolbar.setNavigationOnClickListener {
+            Toast.makeText(this, "Back clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        //? hide menu
+        Timer().schedule(timerTask {
+            runOnUiThread {
+                binding.toolbar.hideOverflowMenu()
+            }
+        }, 3000)
+
+        //? show menu
+        Timer().schedule(timerTask {
+            runOnUiThread {
+                binding.toolbar.showOverflowMenu()
+            }
+        }, 6000)
+
+        //? overflow icon
+        binding.toolbar.overflowIcon =
+            getDrawable(R.drawable.ic_menu_24)
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -33,7 +91,6 @@ class MainActivity : AppCompatActivity() {
         menu?.findItem(R.id.settings)
             ?.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         return super.onPrepareOptionsMenu(menu)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -49,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    // Does not work
+    //! Does not work
 //    override fun onOptionsMenuClosed(menu: Menu?) {
 //        Toast.makeText(this, "Closed", Toast.LENGTH_SHORT).show()
 //        super.onOptionsMenuClosed(menu)
@@ -68,6 +125,11 @@ class MainActivity : AppCompatActivity() {
     override fun invalidateOptionsMenu() {
         super.invalidateOptionsMenu()
         Toast.makeText(this, "Invalidated", Toast.LENGTH_SHORT).show()
+    }
+
+
+    override fun supportInvalidateOptionsMenu() {
+        super.supportInvalidateOptionsMenu()
     }
 
 
