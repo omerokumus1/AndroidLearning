@@ -13,9 +13,16 @@
         android:text="Click"
         android:textAllCaps="false"
         android:textSize="24sp"
+        android:drawablePadding="4dp"
+        android:drawableTop="@drawable/ic_android"
+        android:drawableBottom="@drawable/ic_android"
+        android:drawableLeft="@drawable/ic_android"
+        android:drawableRight="@drawable/ic_android"
+        android:drawableTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
