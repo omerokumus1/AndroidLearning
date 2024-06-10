@@ -10,18 +10,18 @@ class NetworkResultCall<T : Any>(
 ) : Call<NetworkResult<T>> {
 
     override fun enqueue(callback: Callback<NetworkResult<T>>) {
-        proxy.enqueue(object: Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                val networkResult = handleApi {  }
-                callback.onResponse(this@NetworkResultCall, Response.success(networkResult))
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                val networkResult = NetworkResult.Exception<T>(t)
-                callback.onFailure(this@NetworkResultCall, networkResult)
-            }
-
-        }
+//        proxy.enqueue(object: Callback<T> {
+//            override fun onResponse(call: Call<T>, response: Response<T>) {
+//                val networkResult = handleApi {  }
+//                callback.onResponse(this@NetworkResultCall, Response.success(networkResult))
+//            }
+//
+//            override fun onFailure(call: Call<T>, t: Throwable) {
+//                val networkResult = NetworkResult.Exception<T>(t)
+//                callback.onFailure(this@NetworkResultCall, networkResult)
+//            }
+//
+//        })
     }
 
     override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(proxy.clone())
