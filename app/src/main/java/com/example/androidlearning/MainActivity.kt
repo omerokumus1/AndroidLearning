@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.ViewPropertyAnimator
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.example.androidlearning.databinding.ActivityMainBinding
@@ -24,10 +25,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         /* ViewPropertyAnimator */
-        binding.button.setOnClickListener {
+        binding.button.setOnClickListener {button ->
 //            setViewPropertyAnimatorListener()
 //            viewPropertyAnimator1()
 //            viewPropertyAnimator2()
+
+            val animation = AnimationUtils.makeInAnimation(this, true)
+            button.startAnimation(animation)
+
+
 
         }
     }
