@@ -2,6 +2,7 @@ package com.example.androidlearning
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -30,8 +31,18 @@ class MainActivity : AppCompatActivity() {
 //            viewPropertyAnimator1()
 //            viewPropertyAnimator2()
 
-            val animation = AnimationUtils.makeInAnimation(this, true)
-            button.startAnimation(animation)
+//            val animation = AnimationUtils.makeInAnimation(this, true)
+//            button.startAnimation(animation)
+
+            ValueAnimator.ofInt(0, 100).let {
+                it.setDuration(2000L)
+                it.addUpdateListener {animator ->
+                    val value = animator.animatedValue as Int
+
+                }
+            }
+
+
 
 
 
