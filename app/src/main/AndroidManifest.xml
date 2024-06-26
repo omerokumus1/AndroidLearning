@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.androidlearning">
 
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,8 +10,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidLearning">
         <activity
+            android:name=".Activity3"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:taskAffinity="com.example.androidlearning.activity3"
+             />
+
+        <activity
+            android:name=".BaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity2"
+            android:exported="false"
+            android:launchMode="standard" />
+        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

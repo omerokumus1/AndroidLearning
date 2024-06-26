@@ -1,21 +1,23 @@
 package com.example.androidlearning
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import androidx.appcompat.app.AppCompatActivity
-import com.example.androidlearning.databinding.ActivityMainBinding
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.androidlearning.databinding.Activity3Binding
 
+class Activity3 : BaseActivity() {
 
-class MainActivity : BaseActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-
+    private lateinit var binding: Activity3Binding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = Activity3Binding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
 
         binding.startMainActivityBtn.setOnClickListener {
@@ -35,11 +37,9 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         println("New Intent on ${this.localClassName}")
+        Backstack.print()
     }
-
-
 }

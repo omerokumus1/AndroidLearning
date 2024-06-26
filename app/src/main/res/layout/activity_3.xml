@@ -2,11 +2,12 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:id="@+id/main"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".MainActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity3">
 
     <Button
         android:id="@+id/startMainActivityBtn"
@@ -18,8 +19,8 @@
     <Button
         android:id="@+id/startActivity2Btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:layout_height="wrap_content"
         android:text="Start Activity2"
         android:textAllCaps="false" />
 
@@ -30,4 +31,5 @@
         android:layout_marginTop="32dp"
         android:text="Start Activity3"
         android:textAllCaps="false" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>
