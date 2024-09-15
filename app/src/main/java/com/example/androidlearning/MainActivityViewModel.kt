@@ -3,39 +3,57 @@ package com.example.androidlearning
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlin.random.Random
+import kotlin.reflect.KProperty
 
-data class DiceUiState(
-    val firstDieValue: Int? = null,
-    val secondDieValue: Int? = null,
-    val numberOfRolls: Int = 0,
-)
-
+data class Dice(val value: Int)
 
 class MainActivityViewModel : ViewModel() {
 
-    // Expose screen UI state
-    private val _uiState = MutableLiveData(DiceUiState())
-    val uiState: LiveData<DiceUiState> get() = _uiState
+//    private val diceMutableLiveData = MutableLiveData<Dice>()
+//    val diceLiveData: LiveData<Dice> = diceMutableLiveData
 
-    // Handle business logic
+//    val exposableLiveData by ExposableLiveData<MainActivityViewModel, Dice>()
+
+    val exposableLiveData by ExposableLiveData<Dice>()
+
+
     fun rollDice() {
-        _uiState.value =
-            _uiState.value?.copy(
-                firstDieValue = Random.nextInt(from = 1, until = 7),
-                secondDieValue = Random.nextInt(from = 1, until = 7),
-                numberOfRolls = _uiState.value?.numberOfRolls?.plus(1) ?: 1
-            )
+        exposableLiveData.value = Dice((1..6).random())
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    class ExposableLiveData<T> {
+        private val mutableLiveData = MutableLiveData<T>()
+
+        // This is the getter for the LiveData (publicly exposed)
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): LiveData<T> {
+            return mutableLiveData
+        }
+
+        operator fun getValue(thisRef: ViewModel, property: KProperty<*>): MutableLiveData<T> {
+            return mutableLiveData
+        }
+
+//        operator fun setValue(thisRef: Any?, property: KProperty<*>, value: LiveData<T>) {
+//            mutableLiveData.value = value.value
+//        }
+
+        // For setting the value from a background thread
+        fun postValue(value: T) {
+            mutableLiveData.postValue(value)
+        }
     }
-
-
 }
 
+
+//class ExposableLiveData<T, E> {
+//    private val mutableLiveData = MutableLiveData<E>()
+//
+//    operator fun getValue(thisRef: T, property: KProperty<*>): LiveData<E> {
+//        return mutableLiveData
+//    }
+//
+//    operator fun setValue(thisRef: T, property: KProperty<*>, value: Any?) {
+//        mutableLiveData.value = value as E
+//    }
+//
+//}
