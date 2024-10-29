@@ -9,11 +9,7 @@ import com.example.androidlearning.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
-
-    // * UI Logic State Holder created in the UI
-    private val userInputHandler = UserInputHandler()
 
     // * Create ViewModel to store View state
     private val viewModel: MainViewModel by viewModels()
@@ -23,19 +19,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel.isInputValid.observe(this) { isValid ->
+            if (isValid) {
+                Toast.makeText(this, "Input is valid", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Input is invalid", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         binding.editText.addTextChangedListener {
             // * Update state of the UI
-//            userInputHandler.setInputText(it.toString())
             viewModel.setInputText(it.toString())
         }
 
         binding.button.setOnClickListener {
             // * Use UI logic state holder to validate input
-            userInputHandler.setInputText(viewModel.inputText)
-            if (userInputHandler.isInputValid()) {
-                Toast.makeText(this, "Input Validated", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.validateInput()
         }
     }
 
