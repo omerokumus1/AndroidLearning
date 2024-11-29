@@ -17,7 +17,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        Intent(this, ForegroundService::class.java).also {
+            startService(it)
+        }
 
     }
 
