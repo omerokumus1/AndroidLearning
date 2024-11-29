@@ -17,10 +17,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        Intent(this, BackgroundService::class.java).also {
+            startService(it)
+        }
 
 
     }
-
 
 
 }
