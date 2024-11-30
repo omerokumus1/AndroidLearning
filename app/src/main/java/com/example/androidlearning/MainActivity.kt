@@ -17,9 +17,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Intent(this, ForegroundService::class.java).also {
-            startService(it)
+        val serviceIntent = Intent(this, ForegroundService::class.java).also {
+            startForegroundService(it)
         }
+
+        binding.button.setOnClickListener {
+            stopService(serviceIntent)
+        }
+
 
     }
 
