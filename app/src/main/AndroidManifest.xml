@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidLearning">
-        <service android:name=".BackgroundService" />
+        <service android:name=".BoundService" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
