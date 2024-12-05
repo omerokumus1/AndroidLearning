@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidLearning">
         <service android:name=".ServiceWithThread" />
+        <service android:name=".ServiceWithHandlerThread" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
