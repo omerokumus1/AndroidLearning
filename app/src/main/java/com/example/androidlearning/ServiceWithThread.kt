@@ -6,22 +6,19 @@ import android.os.IBinder
 import android.util.Log
 
 
-class BackgroundService : Service() {
-    override fun onCreate() {
-        super.onCreate()
-        // Initialize resources if needed
-        Log.d("MyBackgroundService", "Service Created")
-    }
+class ServiceWithThread : Service() {
+
+    private var backgroundThread: Thread? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("MyBackgroundService", "Service Started")
 
         //* Background service runs on the main thread
         //* Perform the task in a background thread, if it is blocking
-        Thread {
+        backgroundThread = Thread {
             performTask()
-            stopSelf() // Stop the service once the task is complete
-        }.start()
+            stopSelf() //* Stop the service once the task is complete
+        }
 
         return START_STICKY //* Ensures the service restarts if killed by the system
     }
@@ -38,10 +35,9 @@ class BackgroundService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d("MyBackgroundService", "Service Destroyed")
+        //* Stop the thread when Service is destroyed
+        backgroundThread?.interrupt()
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        //* This service does not support binding, so return null
-        return null
-    }
+    override fun onBind(intent: Intent?): IBinder? = null
 }
