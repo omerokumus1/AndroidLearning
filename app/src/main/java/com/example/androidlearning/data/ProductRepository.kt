@@ -6,6 +6,9 @@ class Cache {
 
 class ApiService {
     fun fetchProducts(): List<Product> = TODO()
+    fun fetchArticles(): List<Article> {
+        TODO("Not yet implemented")
+    }
 }
 
 data class Product(val category: String, val price: Double, val rating: Float)
