@@ -1,5 +1,6 @@
 package com.example.androidlearning.data.datasource
 
+import com.example.androidlearning.data.Maybe
 import com.example.androidlearning.data.Single
 
 class UserLocalDataSource {
@@ -35,6 +36,12 @@ class UserLocalDataSource {
     }
 
     fun getUserByID(userId: Int): Single<User> {
+        // Get user by ID from local database
+        TODO()
+    }
+
+    //* Maybe Type Exposing (Reactive Streams)
+    fun getUser(userId: Int): Maybe<User> {
         // Get user by ID from local database
         TODO()
     }
