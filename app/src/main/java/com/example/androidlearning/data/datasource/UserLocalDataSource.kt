@@ -1,5 +1,6 @@
 package com.example.androidlearning.data.datasource
 
+import com.example.androidlearning.data.Completable
 import com.example.androidlearning.data.Maybe
 import com.example.androidlearning.data.Single
 
@@ -45,6 +46,12 @@ class UserLocalDataSource {
         // Get user by ID from local database
         TODO()
     }
+
+    //* Completable Type Exposing (Reactive Streams)
+    fun deleteUserByID(userId: Int): Completable {
+        TODO()
+    }
+
 }
 
 class User(val id: Int, val name: String, val age: Int)
