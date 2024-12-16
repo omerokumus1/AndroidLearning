@@ -1,5 +1,7 @@
 package com.example.androidlearning.data.datasource
 
+import com.example.androidlearning.data.Single
+
 class UserLocalDataSource {
     //* suspend function Exposing
     suspend fun insertOrUpdateUser(user: User) {
@@ -24,6 +26,17 @@ class UserLocalDataSource {
     fun getUserById(userId: Int, callback: ApiCallback<User>) {
         // Get user by ID from local database
         callback.onSuccess(User(1, "John Doe", 25))
+    }
+
+    //* Single Type Exposing (Reactive Streams)
+    fun saveUser(user: User): Single<Boolean> {
+        // Insert or Update user in local database
+        TODO()
+    }
+
+    fun getUserByID(userId: Int): Single<User> {
+        // Get user by ID from local database
+        TODO()
     }
 }
 
